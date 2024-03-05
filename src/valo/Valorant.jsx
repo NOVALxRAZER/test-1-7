@@ -1,56 +1,70 @@
 import React, { useState, useEffect } from 'react';
 import YouTube from 'react-youtube';
 import axios from 'axios';
+import { Button, Flex, Spin } from 'antd';
 import './valoui.scss';
 
 const App = () => {
-    const [data, setData] = useState([]);
-    const [filteredData, setFilteredData] = useState([]);
-    const [selectedItem, setSelectedItem] = useState(null);
+    const [data, setData] = useState([])
+    const [filteredData, setFilteredData] = useState([])
+    const [selectedItem, setSelectedItem] = useState(null)
+    const [loading, setLoading] = useState(false)
 
     useEffect(() => {
-        fetchData();
+        fetchData()
     }, []);
 
     const fetchData = async () => {
         try {
-            const response = await axios.get('https://staging.ina17.com/data.json');
-            setData(response.data);
-            setFilteredData(response.data);
+            setLoading(true)
+            const response = await axios.get('https://staging.ina17.com/data.json')
+            setData(response.data)
+            setFilteredData(response.data)
+            setLoading(false)
         } catch (error) {
-            console.error('Error fetching data:', error);
+            console.error('Error fetching data:', error)
         }
     };
 
     const handleCategoryClick = (category) => {
-        setFilteredData(data.filter(item => item.role === category));
+        setFilteredData(data.filter(item => item.role === category))
     };
 
+    const resetButton = () => {
+        fetchData()
+    }
+
     const handleSearch = (searchTerm) => {
-        setFilteredData(data.filter(item => item.displayName.toLowerCase().includes(searchTerm.toLowerCase())));
+        setFilteredData(data.filter(item => item.displayName.toLowerCase().includes(searchTerm.toLowerCase())))
     };
 
     const handleItemClick = (item) => {
-        setSelectedItem(item);
+        setSelectedItem(item)
     };
 
     const handleCloseModal = () => {
-        setSelectedItem(null);
+        setSelectedItem(null)
     };
 
     console.log("ini dataaaaa : ", data)
 
     return (
         <div className="app">
+            <Spin spinning={loading} />
             <header>
-                <h1>Role-based Website</h1>
+                <h1>VALORANT CHARACTER</h1>
             </header>
             <div className="categories">
                 <h2>Categories</h2>
                 <ul>
                     {Array.from(new Set(data.map(item => item.role))).map((category, index) => (
-                        <li key={index} onClick={() => handleCategoryClick(category)}>{category}</li>
+                        <Flex key={index} style={{ display: "inline-block", padding: "5px" }} wrap="wrap">
+                            <Button onClick={() => handleCategoryClick(category)}>{category}</Button>
+                        </Flex>
                     ))}
+                    <Flex style={{ display: "inline-block", padding: "5px" }} wrap="wrap">
+                        <Button style={{ backgroundColor: "white" }} type="text" onClick={() => resetButton()}>Reset</Button>
+                    </Flex>
                 </ul>
             </div>
             <div className="search">
