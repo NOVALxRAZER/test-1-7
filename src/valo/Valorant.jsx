@@ -73,7 +73,7 @@ const App = () => {
             <div className="items">
                 {filteredData.map((item, index) => (
                     <div key={index} className="item" onClick={() => handleItemClick(item)}>
-                        <img src={item.displayIcon} alt={item.displayName} onError={(e) => e.target.style.display = 'none'} />
+                        <img src={item.displayIcon} alt="" onError={(e) => e.target.style.display = 'none'} />
                         <h3>{item.displayName}</h3>
                     </div>
                 ))}
@@ -82,7 +82,7 @@ const App = () => {
                 <div className="modal">
                     <div className="modal-content">
                         <div className='modal-side'>
-                            <img style={{ height: '40%', width: '40%' }} src={selectedItem.fullPortrait} alt={selectedItem.displayName} />
+                            <img style={{ height: '40%', width: '40%' }} src={selectedItem.fullPortrait} alt="" />
                             <div className='modal-center'>
                                 <span className="close" onClick={handleCloseModal}>&times;</span>
                                 <h2>{selectedItem.displayName}</h2>
